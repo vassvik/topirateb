@@ -30,15 +30,16 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // for macOS
 
     //
     int resx = 640, resy = 480;
-    GLFWwindow *window = glfwCreateWindow(resx, resy, "Title", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(resx, resy, "test", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -2;
     }
+
+    //
     glfwMakeContextCurrent(window); 
     glfwSwapInterval(0);
 
@@ -59,7 +60,7 @@ int main()
 
     //
     GLuint vertex_array_object;
-    glGenVertexArrays(1, &vertex_array_object);
+    glGenVertexArrays(1, &vertex_array_object); // @NOTE: should destroy this at exit
     glBindVertexArray(vertex_array_object);
 
     //
@@ -88,7 +89,7 @@ int main()
     };
 
     GLuint texture;
-    glGenTextures(1, &texture);
+    glGenTextures(1, &texture); // @NOTE: should destroy this at exit
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -140,6 +141,11 @@ int main()
         //
         glfwSwapBuffers(window);
     }
+
+    //
+    glDeleteVertexArrays(1, &vertex_array_object);
+    glDeleteProgram(program);
+    glDeleteTextures(1, &texture);
 
     //
     glfwTerminate();
